@@ -28,6 +28,7 @@ export default function Home() {
     try {
       const res = await fetch(`/api/google/list-sheets?accessToken=${session.accessToken}`);
       const data = await res.json();
+      console.log(data);
       setSheets(data.files || []);
     } catch (err) {
       setError("Failed to load sheets.");

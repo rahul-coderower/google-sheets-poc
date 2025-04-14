@@ -1,3 +1,8 @@
+import {
+  getCachedSpreadSheets,
+  initSpreadsheetCache,
+} from '@/utils/spreadsheetsCache';
+
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const accessToken = searchParams.get('accessToken');
@@ -13,4 +18,11 @@ export async function GET(req: Request) {
 
   const data = await res.json();
   return new Response(JSON.stringify(data), { status: 200 });
+
+  // if (!accessToken) {
+  //   return Response.json({ message: 'Missing access token' }, { status: 400 });
+  // }
+  // await initSpreadsheetCache(accessToken);
+  // const response = getCachedSpreadSheets(accessToken);
+  // return new Response(JSON.stringify(response.data), { status: 200 });
 }

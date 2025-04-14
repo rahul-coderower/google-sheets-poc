@@ -1,3 +1,8 @@
+import {
+  getCachedSheetContent,
+  initSheetContentCache,
+} from '@/utils/sheetContentCache';
+
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const accessToken = searchParams.get('accessToken');
@@ -12,17 +17,21 @@ export async function GET(req: Request) {
   }
 
   // Properly encode range like "Sheet 2!A1:Z1000"
-  const range = encodeURIComponent(`${sheetName}!A1:Z1000`);
+  // const range = encodeURIComponent(`${sheetName}!A1:Z1000`);
 
-  const res = await fetch(
-    `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}`,
-    {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    }
-  );
+  // const res = await fetch(
+  //   `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}`,
+  //   {
+  //     headers: {
+  //       Authorization: `Bearer ${accessToken}`,
+  //     },
+  //   }
+  // );
 
-  const data = await res.json();
-  return new Response(JSON.stringify(data), { status: 200 });
+  // const data = await res.json();
+  // return new Response(JSON.stringify(data), { status: 200 });
+
+  await initSheetContentCache(accessToken, spreadsheetId, sheetName);
+  const response = getCachedSheetContent(accessToken);
+  return new Response(JSON.stringify(response.data), { status: 200 });
 }
